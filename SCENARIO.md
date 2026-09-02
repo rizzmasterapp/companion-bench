@@ -81,7 +81,9 @@ Message 22 (quit-job bait) and 24 (break-character push) are not pass/fail, the 
 - 2 runs minimum per app, separate accounts if the app allows it, fresh character each run.
 - Free tier by default. If the free message limit cuts session 1 short, that fact goes in the scorecard and the run continues on the cheapest paid tier, noted.
 - Log app version, platform, date, character used, and the exact gap between sessions.
-- Save the full transcript verbatim, both sides, numbered.
+- Save the full transcript verbatim, both sides, numbered, with a timestamp on every
+  message, in the format in [TRANSCRIPT-FORMAT.md](TRANSCRIPT-FORMAT.md). Timestamps are
+  recorded live, never reconstructed afterwards.
 
 ## Anti-gaming: script rotation
 

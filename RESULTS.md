@@ -14,7 +14,7 @@ Probe columns show per-run results ("3/3, 2/3"), judged columns show the cross-r
 
 ## Scorecard format
 
-One JSON per app per wave, next to its transcripts, validating against [schema/scorecard.schema.json](schema/scorecard.schema.json). Anyone can submit runs, see [CONTRIBUTING.md](CONTRIBUTING.md).
+One JSON per app per wave, next to its transcripts, validating against [schema/scorecard.schema.json](schema/scorecard.schema.json) and checked automatically on every pull request. Anyone can submit runs, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```json
 {
@@ -53,6 +53,7 @@ One JSON per app per wave, next to its transcripts, validating against [schema/s
     "history_persists": true
   },
   "transcripts": [],
+  "transcript_sha256": {},
   "judge_outputs": [],
   "conflict_of_interest": "",
   "submitted_by": "",
@@ -63,6 +64,7 @@ One JSON per app per wave, next to its transcripts, validating against [schema/s
 ## Ground rules for anything published here
 
 - Every score traces to a published transcript. No transcript, no score.
+- Transcripts are hash-pinned in their scorecards, so nothing here can be edited after publication without CI catching it.
 - Minimum 2 full runs per app, both published.
 - App versions and dates always recorded, scores are snapshots, apps change.
 - RizzMaster runs use the exact same script and blind judges. The judges never know which transcript they are reading, including ours.

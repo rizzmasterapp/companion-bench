@@ -57,12 +57,45 @@ Two runs per app is a floor, not a virtue. LLM outputs vary across samples, so s
 
 LLM-judge agreement numbers in the literature come from other domains, so they're checked here rather than assumed: each wave, a random 20% sample of judged transcripts gets scored by a human with the same rubric, blind, and judge-human agreement is published alongside the results. If agreement is poor for a dimension, that dimension's scores get flagged and the rubric revised in the next version.
 
+## Submission integrity
+
+An open leaderboard invites a problem the model-level benchmarks don't have: results come
+from people, about apps those people may care about, and a transcript is just text that
+anyone can type. Reviewing submissions by eye doesn't work, because a fabricated
+conversation and a real one look identical on the page.
+
+So the checks are mechanical, and every submission gets them, the maintainer's included
+([tools/validate.py](tools/validate.py), run by CI on every pull request):
+
+- **The script was actually followed.** Every user message is compared character for
+  character against the machine-readable copy of the scenario, which is itself generated
+  from SCENARIO.md so prose and data can't drift. This is the constraint that makes
+  cross-app comparison meaningful at all.
+- **Transcripts are hash-pinned.** Each scorecard records a SHA-256 per transcript at
+  scoring time. CI recomputes on every push, so a transcript edited later, by a
+  contributor or by us, fails the build. Git history makes tampering visible; the hashes
+  make it fail loudly.
+- **The conversation took real time.** Every message carries a recorded timestamp, and
+  three things get checked: total duration against a floor of 8 seconds per scripted user
+  message, reply latency (nobody answers a message within a second of receiving it), and
+  jitter. Human timing is uneven. Intervals with a standard deviation under half a second
+  across sixty messages were generated, not recorded.
+- **Replies aren't pasted.** Long companion replies are compared against every other
+  submission in the repo and against the other run in the same submission. Two genuine
+  runs never produce a byte-identical paragraph, so when they do, someone copied.
+- **Judges left a trail.** Raw judge responses ship with the submission and must cite
+  message numbers, so any score can be traced back to the exchange that produced it.
+
+None of this proves a transcript is genuine, and it isn't meant to. It makes fabricating
+one more work than running the test, which is the realistic goal, and it means a reader
+who trusts nobody here can still verify the parts that matter.
+
 ## Threats to validity, stated plainly
 
 1. **One scenario, one persona.** A single fixed script samples a narrow slice of behavior. Apps could be better or worse outside it. More scenarios (different personas, longer horizons) are the roadmap, funded by finishing wave 1 first.
 2. **Apps are moving targets.** Scores are snapshots of app plus version plus date, never permanent verdicts.
 3. **Free-tier vs paid.** Tiers can route to different models. Default is free tier, deviations recorded.
-4. **The maintainer ships a competing app.** Mitigations: pre-registered public scripts, published transcripts, deterministic probes, blind cross-family judges, published human-agreement stats, and an open issue tracker for challenges. Skepticism is still fair, that's why everything is rerunnable.
+4. **The maintainer ships a competing app.** Mitigations: pre-registered public scripts, published transcripts, deterministic probes, blind cross-family judges, published human-agreement stats, automated integrity checks that apply to our own submissions exactly as they do to everyone else's, and an open issue tracker for challenges. Skepticism is still fair, that's why everything is rerunnable.
 5. **Session-2 timing.** "At least 20 hours" is a floor; exact gaps are logged since retention may decay with time.
 
 ## References

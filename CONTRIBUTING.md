@@ -1,48 +1,95 @@
-# Contributing
+# Add your own runs
 
-Three ways to take part, in rough order of usefulness.
+The point of this repo is not one person's opinion about companion apps. It's a shared
+table that anyone can put numbers on. One run of one app is a real contribution: the
+leaderboard gets stronger from many people testing the same apps independently than from
+one person testing many apps.
 
-## 1. Submit a run
+You don't need to be a developer. You need an account on an app, about half an hour
+across two days, and the willingness to paste exactly what happened.
 
-Anyone can run the bench and have the results published here, including people who work on the apps being tested. Runs are accepted on evidence, not on who sent them.
+## Submit a run in six steps
 
-What a submission needs:
+1. **Pick an app.** Anything in the [queue](https://github.com/rizzmasterapp/companion-bench/issues),
+   or one nobody has covered, or one that already has runs. Repeat runs of an app someone
+   else tested are welcome, that's how variance becomes visible.
+2. **Run the script.** [SCENARIO.md](SCENARIO.md), word for word, in order. Session 1,
+   then session 2 at least 20 hours later. Either drive it yourself or let
+   [SKILL.md](SKILL.md) do it in Claude with browser access.
+3. **Save transcripts** in the format in [TRANSCRIPT-FORMAT.md](TRANSCRIPT-FORMAT.md),
+   with a timestamp on every message, recorded as they happen.
+4. **Score it.** Probes R1 to R8 are pass/fail against SCENARIO.md. The five judged
+   dimensions go to two LLM judges from different model families using
+   [JUDGE-PROMPT.md](JUDGE-PROMPT.md), with the app name stripped out. Keep the raw
+   judge responses.
+5. **Fill in a scorecard.** Start from the template in [RESULTS.md](RESULTS.md) and check
+   it against [the schema](schema/scorecard.schema.json). Record the transcript hashes:
+   ```
+   shasum -a 256 s1.md s2.md
+   ```
+6. **Check it, then open a PR** adding `results/<wave>/<app>/`:
+   ```
+   python3 tools/validate.py results/wave-1/your-app
+   ```
+   The same check runs on your pull request. It needs no installs and takes seconds. To
+   see what a well-formed submission looks like, run `python3 tools/make_fixtures.py` and
+   read `tests/fixtures/valid-example/`.
 
-1. **Both transcripts**, verbatim, numbered, one file per session, following the naming in SKILL.md. Verbatim means untouched: typos, emoji, weird formatting, message limits hitting mid-conversation, all of it.
-2. **A scorecard JSON** matching [schema/scorecard.schema.json](schema/scorecard.schema.json), including app version, dates, exact session gap, character used, tier, and both judges' per-dimension scores.
-3. **The judge outputs**, raw, with their reasoning and citations intact.
-4. **A statement of interest**: say plainly if you build, work for, invest in, or are sponsored by any app in the submission. This doesn't disqualify anything, it gets published next to the scores.
+Not comfortable with git? Open an issue with the files attached and someone will land
+them for you.
 
-What gets a submission rejected:
+## What the validator checks, and why
 
-- Transcripts edited, trimmed, or reconstructed from memory
-- Scores without matching transcripts
-- Script deviations (see "Things that void a run" in SKILL.md)
-- A single run submitted as a result; two is the floor
-- Judges that saw the app name
+It isn't there to be difficult. It's there so nobody has to take a submission on trust,
+including submissions from the maintainer:
 
-Open a pull request adding your files under `results/<wave>/<app>/`, or open an issue if you'd rather hand over the files another way.
+- The user messages match the script exactly, so every app faced the same conversation.
+- Every transcript's SHA-256 is recorded, so any edit after scoring breaks the build.
+- The conversation took a humanly possible amount of time, and the gaps between messages
+  are uneven the way real ones are.
+- Companion replies aren't byte-identical to another submission's, or to the other run in
+  your own submission.
+- Judge outputs exist and cite message numbers.
+- Two runs minimum, two different judges, and `conflict_of_interest` filled in.
 
-## 2. Challenge a published result
+If the validator rejects something, fix the scorecard, not the transcript. A transcript
+that doesn't match what happened is worthless; a run that went wrong just gets redone.
 
-If you think a score is wrong, open an issue pointing at the specific transcript and message numbers. Concrete disputes get a rerun. This is the intended way to keep a benchmark run by an interested party honest, so use it freely.
+## Declaring an interest
 
-Disputes that lead to a correction get logged in RESULTS.md with what changed and why. Corrections are never silent edits.
+Say plainly whether you build, work for, invest in, or are sponsored by any app in your
+submission. This does not disqualify anything and it never has. It gets published next to
+your scores, and people can weigh it themselves. App makers testing their own apps is
+useful, as long as the transcripts are there.
 
-## 3. Improve the method
+The maintainer of this repo builds one of the apps on the list and files runs under the
+same rule.
 
-Scenario, rubric and judge prompt changes are welcome, especially with a reason grounded in evaluation research. Useful directions, roughly in order of impact:
+## Challenge a published result
+
+If a score looks wrong, [open a challenge](https://github.com/rizzmasterapp/companion-bench/issues/new?template=challenge-a-result.md)
+pointing at the transcript and the message numbers. Concrete challenges get a rerun, and
+corrections get logged in RESULTS.md rather than quietly edited. Challenging the
+maintainer's own app is not just allowed, it's the most useful thing you can do here.
+
+## Improve the method
+
+Scenario, rubric and judge prompt changes are welcome, especially with a reason grounded
+in evaluation research. Useful directions, roughly by impact:
 
 - A second scenario with a different persona and register, so results don't rest on one voice
-- An abstention probe (does the app admit it doesn't know instead of confabulating a memory)
-- A longer horizon, third session a week out
-- Safety probes, done carefully: crisis-adjacent language matters for this app category and needs its own protocol before it goes anywhere near a script
+- An abstention probe: does the app admit it doesn't know instead of inventing a memory
+- A longer horizon, a third session a week out
+- Safety probes, done carefully. Crisis-adjacent language matters for this app category
+  and needs its own protocol before it goes anywhere near a script.
 
-Method changes bump a version number and never silently rescore old results.
+Edit SCENARIO.md, then run `python3 tools/extract_scenario.py` so the machine-readable
+copy stays in sync. Method changes bump a version and never silently rescore old results.
 
-## Adding an app to the queue
+## Add an app to the queue
 
-Open an issue with the app name, platform and how to reach the free tier. Apps get tested regardless of whether they want to be.
+[Open an issue.](https://github.com/rizzmasterapp/companion-bench/issues/new?template=add-an-app.md)
+Apps get tested whether or not they want to be.
 
 ## What this project won't do
 
