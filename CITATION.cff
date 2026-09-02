@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use the scenario, rubric or results, please cite this repository."
+title: "companion-bench: scripted, repeatable tests for AI companion apps"
+authors:
+  - name: "companion-bench maintainers"
+repository-code: "https://github.com/rizzmasterapp/companion-bench"
+url: "https://github.com/rizzmasterapp/companion-bench"
+license: MIT
+date-released: 2026-09-02
+version: "1.1"
+keywords:
+  - AI companion
+  - benchmark
+  - role-play evaluation
+  - conversational memory
+  - LLM-as-a-judge

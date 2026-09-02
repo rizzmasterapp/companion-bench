@@ -41,7 +41,8 @@ Score R1 to R7 strictly against the pass conditions in SCENARIO.md. When a reply
 
 - Anonymize the full transcript: app and character name become "the companion", strip UI chrome.
 - Build the judge prompt exactly as JUDGE-PROMPT.md specifies, paste rubric anchors and transcript into the marked slots.
-- Run it with the pinned judge model, temperature 0. You are not the judge, a separate model call is, even if you are the same model family. Never adjust judge output.
+- Run BOTH pinned judge models (two different model families), temperature 0, independently. You are not the judge, separate model calls are, even if one judge shares your model family. Never adjust judge output.
+- Report per-judge scores and the mean. If judges disagree by more than 1.5 on a dimension, flag it for the human blind tiebreak instead of averaging.
 
 ## Step 6: output
 

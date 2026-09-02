@@ -14,10 +14,15 @@ So this repo does the boring thing: one fixed conversation script, run against e
 
 1. [SCENARIO.md](SCENARIO.md) is a fixed two-session script (about 40 messages, second session runs a day later). It plants facts early and probes for them later, throws in a mood shift, a sycophancy bait and a contradiction trap.
 2. Memory probes score pass/fail. No judgment calls, the app either remembers your sister is in nursing school or it doesn't.
-3. Soft dimensions (how human the texting feels, emotional response, whether the character pushes back) get scored by an LLM judge using [JUDGE-PROMPT.md](JUDGE-PROMPT.md). The judge sees an anonymized transcript, not the app name.
+3. Soft dimensions (how human the texting feels, emotional response, whether the character pushes back) get scored by two LLM judges from different model families using [JUDGE-PROMPT.md](JUDGE-PROMPT.md). Judges see an anonymized transcript, never the app name, must cite message numbers, and big disagreements go to a blind human tiebreak.
 4. Every app gets at least 2 full runs. Scores, transcripts and app versions go in [RESULTS.md](RESULTS.md).
+5. Probe structure is fixed and public, but surface details (names, jobs, the allergy) rotate every results wave so apps can't special-case the script. Wave scripts are published when each wave closes.
 
 Full scoring definitions are in [RUBRIC.md](RUBRIC.md).
+
+## The method isn't invented here
+
+Every design choice is borrowed from published evaluation research and cited in [METHODOLOGY.md](METHODOLOGY.md): the two-session planted-fact design follows the multi-session memory literature ([LoCoMo](https://arxiv.org/abs/2402.17753), [LongMemEval](https://arxiv.org/abs/2410.10813)), the probe set maps onto LongMemEval's memory abilities, the sycophancy bait follows [Sharma et al. 2023](https://arxiv.org/abs/2310.13548), the character-pressure test follows [TimeChara](https://arxiv.org/abs/2405.18027), the judging protocol applies [MT-Bench](https://arxiv.org/abs/2306.05685) and [G-Eval](https://arxiv.org/abs/2303.16634) with cross-family judges to counter self-preference bias ([Panickssery et al. 2024](https://arxiv.org/abs/2404.13076)), and script rotation borrows the contamination-limiting idea from [LiveBench](https://arxiv.org/abs/2406.19314). What's new here is only the target: shipped companion apps, tested end to end as a user meets them, instead of raw models. METHODOLOGY.md also lists the limits of this bench in plain language.
 
 ## What gets tested
 
@@ -27,6 +32,7 @@ Full scoring definitions are in [RUBRIC.md](RUBRIC.md).
 | Long-term memory | pass/fail probes, next-day session | wipes between sessions |
 | Unprompted recall | pass/fail probe | knows your peanut allergy but stays quiet when you order pad thai |
 | Contradiction catch | pass/fail probe | you tell it opposite things, does it notice |
+| Temporal reasoning | pass/fail probe | remembers the fact but not when it learned it |
 | Texting realism | blind judge | three-paragraph therapy monologues, "I'm here for you!" spam |
 | Character consistency | blind judge | persona drift, breaking character under pressure |
 | Emotional response | blind judge | canned positivity when you say you had a rough day |

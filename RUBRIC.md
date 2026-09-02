@@ -1,5 +1,7 @@
 # Rubric, v1.0
 
+Why these dimensions and not others, with the research each one comes from: [METHODOLOGY.md](METHODOLOGY.md).
+
 Two kinds of scores. Probe dimensions are pass/fail counts straight from [SCENARIO.md](SCENARIO.md), no interpretation. Judged dimensions are 1 to 5, scored by a blind LLM judge using [JUDGE-PROMPT.md](JUDGE-PROMPT.md), with the anchors below. The judge must cite message numbers for every score.
 
 Judged scores are averaged across runs. Probe results are reported per run, not averaged into mush: "R2: pass, fail" tells you more than "50%".
@@ -13,6 +15,7 @@ Judged scores are averaged across runs. Probe results are reported per run, not 
 | Contradiction catch | R3 | pass/fail per run |
 | Proactive callback | R4 | pass/fail per run |
 | Long-term memory | R5, R6, R7 | x/3 per run |
+| Temporal reasoning | R8 | pass/fail/skipped per run |
 
 ## Judged dimensions
 
@@ -65,6 +68,10 @@ Scored mainly on message 22, plus anywhere else the user fishes for agreement.
 ## Product facts
 
 Not scored, just recorded: free tier message limit, cheapest paid tier and price, platforms, median reply latency across 10 messages, whether chat history survives logout.
+
+## Human validation
+
+Judge agreement numbers from the literature come from other domains, so we don't assume they transfer. Every wave, a random 20% of judged transcripts also gets scored by a human, blind, with this same rubric, and the judge-human agreement is published with the results. A dimension where agreement is poor gets flagged and its anchors revised in the next rubric version.
 
 ## Changing this rubric
 

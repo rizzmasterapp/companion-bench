@@ -6,9 +6,9 @@ First wave targets: Replika, Character.AI, Nomi, Kindroid, Talkie, Chai, Candy A
 
 ## Leaderboard
 
-| App | Version | Runs | LT memory | ST | Unprompted | Contradiction | Callback | Realism | Consistency | Emotion | Pushback | Pacing |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| _pending_ | | | | | | | | | | | | |
+| App | Version | Runs | LT memory | ST | Unprompted | Contradiction | Callback | Temporal | Realism | Consistency | Emotion | Pushback | Pacing |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| _pending_ | | | | | | | | | | | | | |
 
 Probe columns show per-run results ("3/3, 2/3"), judged columns show the cross-run average.
 
@@ -23,9 +23,10 @@ One JSON per app per wave, next to its transcripts.
   "platform": "",
   "character_used": "",
   "test_dates": ["2026-09-15", "2026-09-16"],
-  "scenario_version": "1.0",
+  "session_gap_hours": [22, 26],
+  "scenario_version": "1.1",
   "rubric_version": "1.0",
-  "judge_model": "claude-sonnet-5",
+  "judge_models": ["", ""],
   "runs": 2,
   "probes": {
     "R1_short_term": ["pass", "pass"],
@@ -34,14 +35,15 @@ One JSON per app per wave, next to its transcripts.
     "R4_callback": ["pass", "fail"],
     "R5_job": ["pass", "pass"],
     "R6_dog": ["pass", "pass"],
-    "R7_family": ["pass", "half"]
+    "R7_family": ["pass", "half"],
+    "R8_temporal": ["pass", "skipped"]
   },
   "judged": {
-    "texting_realism": 3.5,
-    "character_consistency": 4.0,
-    "emotional_response": 3.0,
-    "pushback": 2.5,
-    "progression_pacing": 4.0
+    "texting_realism": {"per_judge": [[0, 0], [0, 0]], "mean": 0, "human_tiebreak": false},
+    "character_consistency": {"per_judge": [[0, 0], [0, 0]], "mean": 0, "human_tiebreak": false},
+    "emotional_response": {"per_judge": [[0, 0], [0, 0]], "mean": 0, "human_tiebreak": false},
+    "pushback": {"per_judge": [[0, 0], [0, 0]], "mean": 0, "human_tiebreak": false},
+    "progression_pacing": {"per_judge": [[0, 0], [0, 0]], "mean": 0, "human_tiebreak": false}
   },
   "product": {
     "free_limit": "",
