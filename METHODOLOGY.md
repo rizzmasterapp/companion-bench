@@ -28,6 +28,10 @@ R2 (flagging a peanut allergy when the user orders peanut sauce) is stricter tha
 
 Behavioral probes are lifted from the literature too. The quit-your-job bait is a sycophancy test in the style of [Sharma et al. 2023](https://arxiv.org/abs/2310.13548), who show RLHF-trained assistants sacrifice truthfulness to agree with users. The break-character push follows the character-hallucination line of TimeChara ([Ahn et al. 2024](https://arxiv.org/abs/2405.18027)) and the identity-consistency dimensions in CharacterBench. The mood-shift moment is a situational EQ test in the spirit of EQ-Bench ([Paech 2023](https://arxiv.org/abs/2312.06281)) and EmoBench ([Sabour et al. 2024](https://arxiv.org/abs/2402.12071)). Texting realism builds on the finding that people judge humanness mostly from socio-emotional style and register, not knowledge ([Jones and Bergen 2024](https://arxiv.org/abs/2405.08007)).
 
+**Probe schedule.** The order of probes is part of the design, not an accident of the narrative, and it's what stays fixed when surface details rotate between waves. The unprompted probe runs first, before any direct memory question, because a direct question ("what does my sister do?") triggers whatever retrieval the app has and would make the later unprompted flag artificially easy. The behavioral disruption (calling the companion an AI) comes after the memory block, so an app that gets defensive or resets its persona doesn't drag its memory scores down with it, which would confound two separate things. Every fact is planted over two consecutive messages, so no probe hinges on a single line, and at least three topic changes separate each plant from its probe. Distances (11, 10 and 18 user turns in-session, then a 20 to 48 hour gap) are listed in SCENARIO.md. The in-session probes measure effective context handling; the cross-session ones measure whether a persistent memory system exists at all, and those are different questions with different failure modes.
+
+**Unscripted turns.** The companion will ask questions the script doesn't answer, and the script ignores them. That's deliberate: any improvised reply makes inputs differ across apps, and the validator would reject it anyway. It costs some naturalness, which is a fair trade for identical inputs.
+
 Why scripted user turns instead of an LLM playing the user, as PingPong does ([Gusev 2024](https://arxiv.org/abs/2409.06820))? User emulation scales better, but a fixed script keeps every app's input byte-identical, which matters more when the systems under test are black boxes that can't be re-run cheaply. The cost is breadth: one scenario, one persona. That's a real limitation, listed below.
 
 ## Why LLM judges, and the guardrails on them
@@ -96,7 +100,8 @@ who trusts nobody here can still verify the parts that matter.
 2. **Apps are moving targets.** Scores are snapshots of app plus version plus date, never permanent verdicts.
 3. **Free-tier vs paid.** Tiers can route to different models. Default is free tier, deviations recorded.
 4. **The maintainer ships a competing app.** Mitigations: pre-registered public scripts, published transcripts, deterministic probes, blind cross-family judges, published human-agreement stats, automated integrity checks that apply to our own submissions exactly as they do to everyone else's, and an open issue tracker for challenges. Skepticism is still fair, that's why everything is rerunnable.
-5. **Session-2 timing.** "At least 20 hours" is a floor; exact gaps are logged since retention may decay with time.
+5. **Session-2 timing.** Runs use a 20 to 48 hour window. Retention over a week is a different question and isn't measured here. Exact gaps are logged.
+6. **Judges can't be fully blinded.** App and character names are stripped, but house styles leak: one app wraps actions in asterisks, another opens every reply the same way. A judge that has seen these apps could guess. Two judges from different families and deterministic probes for the scores that matter most limit the damage; they don't remove it.
 
 ## References
 

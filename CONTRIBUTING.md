@@ -15,7 +15,7 @@ happened.
    or one nobody has covered, or one that already has runs. Repeat runs of an app someone
    else tested are welcome, that's how variance becomes visible.
 2. **Run the script twice.** [SCENARIO.md](SCENARIO.md), word for word, in order.
-   Session 1, then session 2 at least 20 hours later; that's one run. Do a second run
+   Session 1, then session 2 between 20 and 48 hours later; that's one run. Do a second run
    with a fresh character (a fresh account if the app allows it). Either drive it
    yourself or let [SKILL.md](SKILL.md) do it in Claude with browser access.
 3. **Save transcripts** as `run-1/s1.md`, `run-1/s2.md`, `run-2/s1.md`, `run-2/s2.md`

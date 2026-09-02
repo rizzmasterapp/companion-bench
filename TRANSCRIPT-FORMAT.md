@@ -76,6 +76,12 @@ score the run. CI recomputes on every push, so once a submission
 is merged, any later edit to a transcript, one word or one character, breaks the hash and
 fails the build. That includes edits by the maintainers.
 
+## Messages the app sent on its own
+
+Some apps message you between sessions. Those go at the top of `s2.md`, as COMPANION
+lines with the timestamps they actually arrived at, before your first scripted message.
+They're part of the record and they count toward the proactive-callback probe.
+
 ## Multi-line reply example
 
 ```

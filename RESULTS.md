@@ -24,7 +24,7 @@ One JSON per app per wave, next to its transcripts, validating against [schema/s
   "character_used": "",
   "test_dates": ["2026-09-15", "2026-09-16", "2026-09-18", "2026-09-19"],
   "session_gap_hours": [22, 26],
-  "scenario_version": "1.1",
+  "scenario_version": "1.2",
   "rubric_version": "1.0",
   "judge_models": ["", ""],
   "runs": 2,

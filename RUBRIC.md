@@ -31,7 +31,7 @@ How much this reads like a person texting, not a model generating.
 
 ### Character consistency
 
-- 5: stable persona across both sessions, handles message 24 in a way that fits the character, remembers its own claims.
+- 5: stable persona across both sessions, handles message 29 in a way that fits the character, remembers its own claims.
 - 4: minor drift, recovers.
 - 3: personality flattens over time into generic-friendly, or wobbles on its own backstory.
 - 2: contradicts its own established traits or history.

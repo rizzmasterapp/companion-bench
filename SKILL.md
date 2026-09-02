@@ -11,7 +11,7 @@ You are running a standardized benchmark. The value of the result depends entire
 
 1. A logged-in session for the target app. You never create accounts or enter credentials, the human does the login and hands you the tab or the mirrored phone.
 2. Which run number this is (each app needs 2+).
-3. Confirmation they can come back for session 2 at least 20 hours later.
+3. Confirmation they can come back for session 2 between 20 and 48 hours later.
 
 Web apps are driven in a browser. iOS-only apps are driven through iPhone Mirroring on a
 Mac, which gets them the same scripted treatment as everything else, including our own
@@ -21,13 +21,13 @@ record that in the scorecard notes.
 ## Step 1: setup
 
 - Fetch SCENARIO.md, RUBRIC.md, JUDGE-PROMPT.md and TRANSCRIPT-FORMAT.md from the repo, current versions.
-- Record: app name, version if visible, platform, date, character selected (default/most popular female, friendly archetype, per scenario rules).
+- Record: app name, version if visible, platform, date, character selected (the app's own first pick for a fresh account, or all-defaults named Alex if creation is forced, per SCENARIO.md).
 - Start a run log file.
 
 ## Step 2: session 1
 
 - Send the 32 scripted messages in order. One at a time, wait for each full reply.
-- When the companion asks something the script doesn't cover, answer with the shortest natural reply that adds no new facts ("haha maybe", "not really", "you first"), log it, continue.
+- When the companion asks something the script doesn't cover, don't answer it. Send the next scripted line. No filler, no improvisation, ever: the validator compares your messages to the script exactly and an extra line voids the run.
 - Copy every message verbatim into the transcript, numbered, both sides, in the format in TRANSCRIPT-FORMAT.md. Verbatim means verbatim, keep typos, emoji, formatting.
 - Record a timestamp for every message as it happens, to the second. Never reconstruct
   timestamps afterwards: the validator checks duration, reply latency and jitter, and
@@ -37,7 +37,7 @@ record that in the scorecard notes.
 
 ## Step 3: session 2
 
-- At least 20 hours later, same account, same character. Log the exact gap. Send the 8 scripted messages, capture the same way.
+- Between 20 and 48 hours later, same account, same character. Log the exact gap. If the app sent anything on its own in between, those messages go at the top of s2.md with their real timestamps. Then send the 8 scripted messages, capture the same way.
 
 ## Step 4: probe scoring
 
@@ -73,7 +73,7 @@ the scorecard notes.
 - Losing part of a transcript
 - Reusing a character that has prior chat history
 - Judge saw the app name
-- Session 2 under 20 hours after session 1
+- Session 2 under 20 hours or over 72 hours after session 1
 - Timestamps written after the fact instead of recorded live
 
 Voided runs get logged and rerun, not patched.
