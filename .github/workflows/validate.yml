@@ -1,0 +1,32 @@
+name: validate
+
+# Free on public repositories: standard runners, no minute charges, and this
+# workflow installs nothing. Ubuntu ships the python3 it needs.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Script data matches SCENARIO.md
+        run: python3 tools/extract_scenario.py --check
+
+      - name: Build the validator's test fixtures
+        run: python3 tools/make_fixtures.py
+
+      - name: Validator catches what it should
+        run: python3 tools/validate.py --fixtures
+
+      - name: Validate submitted results
+        run: python3 tools/validate.py --all
