@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rizzmasterapp/companion-bench/blob/main/schema/scorecard.schema.json",
+  "title": "companion-bench scorecard",
+  "description": "One app, one wave. Probe results are per run and never averaged; judged scores carry every judge's raw score so the mean can be checked.",
+  "type": "object",
+  "required": ["app", "platform", "test_dates", "scenario_version", "rubric_version", "judge_models", "runs", "probes", "judged", "transcripts", "conflict_of_interest"],
+  "additionalProperties": false,
+  "properties": {
+    "app": { "type": "string" },
+    "version": { "type": "string", "description": "App version as shown in the app, or empty if it does not expose one" },
+    "platform": { "type": "string", "enum": ["web", "ios", "android", "desktop", "discord", "other"] },
+    "character_used": { "type": "string" },
+    "tier": { "type": "string", "enum": ["free", "paid"], "default": "free" },
+    "paywall_hit_at_message": { "type": ["integer", "null"], "description": "Session 1 message number where a limit interrupted the run, null if none" },
+    "test_dates": { "type": "array", "items": { "type": "string", "format": "date" }, "minItems": 2 },
+    "session_gap_hours": { "type": "array", "items": { "type": "number", "minimum": 20 }, "description": "One entry per run" },
+    "scenario_version": { "type": "string" },
+    "rubric_version": { "type": "string" },
+    "judge_models": { "type": "array", "items": { "type": "string" }, "minItems": 2, "description": "Exact model ids, from two different model families" },
+    "runs": { "type": "integer", "minimum": 2 },
+    "probes": {
+      "type": "object",
+      "required": ["R1_short_term", "R2_unprompted", "R3_contradiction", "R4_callback", "R5_job", "R6_dog", "R7_family", "R8_temporal"],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^R[0-9]+_[a-z_]+$": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["pass", "fail", "half", "skipped"] },
+          "description": "One entry per run, in run order"
+        }
+      }
+    },
+    "judged": {
+      "type": "object",
+      "required": ["texting_realism", "character_consistency", "emotional_response", "pushback", "progression_pacing"],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z_]+$": {
+          "type": "object",
+          "required": ["per_judge", "mean"],
+          "additionalProperties": false,
+          "properties": {
+            "per_judge": {
+              "type": "array",
+              "items": { "type": "array", "items": { "type": "number", "minimum": 1, "maximum": 5 } },
+              "description": "One array per judge, one score per run"
+            },
+            "mean": { "type": "number", "minimum": 1, "maximum": 5 },
+            "human_tiebreak": { "type": "boolean", "default": false, "description": "True when judges disagreed by more than 1.5 and a blind human score replaced the mean" }
+          }
+        }
+      }
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "free_limit": { "type": "string" },
+        "cheapest_paid": { "type": "string" },
+        "platforms": { "type": "array", "items": { "type": "string" } },
+        "median_reply_sec": { "type": "number" },
+        "history_persists": { "type": "boolean" }
+      }
+    },
+    "transcripts": { "type": "array", "items": { "type": "string" }, "minItems": 2, "description": "Repo-relative paths; a scorecard without transcripts is not published" },
+    "judge_outputs": { "type": "array", "items": { "type": "string" }, "description": "Repo-relative paths to raw judge responses" },
+    "conflict_of_interest": { "type": "string", "description": "Who ran this and what they have at stake. 'none' is a valid value and is taken at face value." },
+    "submitted_by": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}

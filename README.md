@@ -44,17 +44,19 @@ Every design choice is borrowed from published evaluation research and cited in 
 
 Scripts and rubric went public first, before any scores. That's on purpose: you can verify no scenario was tuned after the fact to favor anyone. Results land in [RESULTS.md](RESULTS.md) as runs complete. First wave list: Replika, Character.AI, Nomi, Kindroid, Talkie, Chai, Candy AI, RizzMaster.
 
-Want an app added? Open an issue.
+Want an app added? Open an issue. Want to run it yourself and have the results published here? Also yes, see below.
 
 ## Who runs this and the obvious conflict of interest
 
 I build [RizzMaster](https://rizzmaster.net), an AI dating simulator for iOS where characters remember you and the relationship actually builds up instead of starting maxed out. So yes, I have skin in this game, which is exactly why everything here is scripted, transcribed and rerunnable. RizzMaster goes through the same script as everyone else and its transcripts get published the same way. If it loses a category, that stays in too.
 
-If you think a scenario or rubric line tilts the field, open an issue and say where.
+Structural safeguards, not just promises: deterministic probes that don't pass through any judge, judges from two different model families that never see the app name, published human agreement checks each wave, every scorecard carrying a statement of interest, and an open dispute process where a concrete challenge gets a rerun. If you think a scenario or rubric line tilts the field, open an issue and say where.
 
-## Run it yourself
+## Run it yourself, or submit runs
 
 [SKILL.md](SKILL.md) is a ready-made skill for Claude (works in Claude Code with browser access). Point it at a companion app's web version and it runs the script, collects the transcript and produces a scorecard. iOS-only apps need a human running the script by hand, same messages, same order.
+
+Runs from anyone get published here, including from people who work on the apps being tested, as long as they come with verbatim transcripts, a scorecard matching [the schema](schema/scorecard.schema.json), raw judge output and a statement of interest. Details in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
