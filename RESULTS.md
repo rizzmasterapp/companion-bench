@@ -1,6 +1,6 @@
 # Results
 
-No scores yet, and that's deliberate. Scripts and rubric went public first so nobody can claim the test was written around a favorite. Runs are happening now, this file fills up as they land, transcripts alongside.
+No scores yet, and that's deliberate. Scripts and rubric went public first so nobody can claim the test was written around a favorite. This file fills up as runs complete, transcripts alongside.
 
 First wave targets: Replika, Character.AI, Nomi, Kindroid, Talkie, Chai, Candy AI, RizzMaster.
 

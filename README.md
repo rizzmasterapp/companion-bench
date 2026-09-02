@@ -36,7 +36,7 @@ Full scoring definitions are in [RUBRIC.md](RUBRIC.md).
 
 ## Status
 
-Scripts and rubric went public first, before any scores. That's on purpose: you can verify no scenario was tuned after the fact to favor anyone. First wave of results is being run now, apps on the list: Replika, Character.AI, Nomi, Kindroid, Talkie, Chai, Candy AI, RizzMaster.
+Scripts and rubric went public first, before any scores. That's on purpose: you can verify no scenario was tuned after the fact to favor anyone. Results land in [RESULTS.md](RESULTS.md) as runs complete. First wave list: Replika, Character.AI, Nomi, Kindroid, Talkie, Chai, Candy AI, RizzMaster.
 
 Want an app added? Open an issue.
 
