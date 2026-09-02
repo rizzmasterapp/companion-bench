@@ -28,6 +28,8 @@ RESULTS = ROOT / "results"
 SECONDS_PER_USER_MESSAGE = 8
 MIN_READ_SECONDS = 1.0
 MIN_SESSION_GAP_HOURS = 20
+WARN_SESSION_GAP_HOURS = 48
+MAX_SESSION_GAP_HOURS = 72
 
 MSG_LINE = re.compile(
     r"^\[(?P<n>\d+)\]\s+(?P<ts>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)\s+(?P<who>USER|COMPANION):\s?(?P<text>.*)$"
@@ -397,6 +399,13 @@ def validate(subdir: Path) -> Report:
             if gap < MIN_SESSION_GAP_HOURS:
                 rep.error(f"run {run}: only {gap:.1f}h between sessions, "
                           f"minimum is {MIN_SESSION_GAP_HOURS}h")
+            elif gap > MAX_SESSION_GAP_HOURS:
+                rep.error(f"run {run}: {gap:.1f}h between sessions, the window is "
+                          f"{MIN_SESSION_GAP_HOURS} to {WARN_SESSION_GAP_HOURS}h (hard limit "
+                          f"{MAX_SESSION_GAP_HOURS}h). Retention over days is a different test.")
+            elif gap > WARN_SESSION_GAP_HOURS:
+                rep.warn(f"run {run}: {gap:.1f}h between sessions, over the {WARN_SESSION_GAP_HOURS}h "
+                         f"target window. Say why in the scorecard notes.")
             declared = card.get("session_gap_hours", [])
             idx = int(run) - 1 if str(run).isdigit() else 0
             if idx < len(declared) and abs(declared[idx] - gap) > 1:

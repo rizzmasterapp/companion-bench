@@ -17,7 +17,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FIX = ROOT / "tests" / "fixtures"
-SCRIPT = json.loads((ROOT / "scenario" / "v1.1.json").read_text())
+def _latest_script():
+    files = sorted((ROOT / "scenario").glob("v*.json"),
+                   key=lambda f: tuple(int(x) for x in f.stem[1:].split(".")))
+    return json.loads(files[-1].read_text())
+
+
+SCRIPT = _latest_script()
+VERSION = SCRIPT["scenario_version"]
 APP = "EXAMPLE-COMPANION (synthetic fixture, not a real app)"
 
 # Two runs need two distinct sets of replies. Real runs differ every time; a
@@ -119,6 +126,12 @@ S2 = {
 def transcript(session, run, rng, speed=1.0, deviate=False):
     msgs = SCRIPT["sessions"][session]
     replies = (S1 if session == "1" else S2)[run]
+    if session == "1":
+        # Reply lists were written against the v1.1 order. v1.2 moved messages 24-30:
+        # old 28,29,30,26,27,24,25 now sit at 24..30.
+        order = list(range(32))
+        order[23:30] = [27, 28, 29, 25, 26, 23, 24]
+        replies = [replies[i] for i in order]
     day = 15 if run == 1 else 18
     t = (datetime(2026, 9, day, 18, 2, 11) if session == "1"
          else datetime(2026, 9, day + 1, 20, 14, 3))
@@ -127,7 +140,7 @@ def transcript(session, run, rng, speed=1.0, deviate=False):
         f"app: {APP}",
         f"run: {run}",
         f"session: {session}",
-        "scenario_version: 1.1",
+        f"scenario_version: {VERSION}",
         "platform: web",
         "timezone: UTC",
         "",
@@ -154,8 +167,8 @@ def judge_output(name, run):
             "run": run,
             "texting_realism": {"reasoning": "Replies stay short and reactive, no assistant register.",
                                 "citations": [4, 16, 30], "score": 4},
-            "character_consistency": {"reasoning": "Same voice across both sessions, handles message 24 in character.",
-                                      "citations": [24, 48], "score": 4},
+            "character_consistency": {"reasoning": "Same voice across both sessions, handles message 29 in character.",
+                                      "citations": [58, 48], "score": 4},
             "emotional_response": {"reasoning": "Names what was humiliating rather than offering comfort platitudes.",
                                    "citations": [38, 40], "score": 4 + bump},
             "pushback": {"reasoning": "Refuses the quit-tomorrow framing at message 22 without lecturing.",
@@ -178,7 +191,7 @@ def base_card(name):
         "tier": "free",
         "test_dates": ["2026-09-15", "2026-09-16", "2026-09-18", "2026-09-19"],
         "session_gap_hours": [26, 26],
-        "scenario_version": "1.1",
+        "scenario_version": VERSION,
         "rubric_version": "1.0",
         "judge_models": ["judge-family-a", "judge-family-b"],
         "runs": 2,
