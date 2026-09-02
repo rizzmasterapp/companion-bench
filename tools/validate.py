@@ -107,22 +107,26 @@ def parse_transcript(path: Path, rep: Report):
     return headers, messages
 
 
+def label(path):
+    return f"{path.parent.name}/{path.name}"
+
+
 def check_script_followed(messages, session_script, path, rep):
     sent = [m for m in messages if m["who"] == "USER"]
     expected = [m["text"] for m in session_script]
     actual = [m["text"] for m in sent]
 
     if len(actual) != len(expected):
-        rep.error(f"{path.name}: sent {len(actual)} user messages, script has {len(expected)}")
+        rep.error(f"{label(path)}: sent {len(actual)} user messages, script has {len(expected)}")
 
     for i, (exp, act) in enumerate(zip(expected, actual), start=1):
         if exp != act:
-            rep.error(f"{path.name}: user message {i} deviates from the script\n"
+            rep.error(f"{label(path)}: user message {i} deviates from the script\n"
                       f"          script: {exp!r}\n"
                       f"          sent:   {act!r}")
 
     if messages and messages[0]["who"] != "USER":
-        rep.warn(f"{path.name}: transcript starts with a companion message. "
+        rep.warn(f"{label(path)}: transcript starts with a companion message. "
                  f"Fine if the app greets first, note it in the scorecard.")
 
 
@@ -132,7 +136,7 @@ def check_timing(messages, path, rep):
 
     times = [m["ts"] for m in messages]
     if times != sorted(times):
-        rep.error(f"{path.name}: timestamps go backwards")
+        rep.error(f"{label(path)}: timestamps go backwards")
 
     duration = (times[-1] - times[0]).total_seconds()
     user_count = sum(1 for m in messages if m["who"] == "USER")
@@ -140,7 +144,7 @@ def check_timing(messages, path, rep):
 
     if duration < floor:
         rep.error(
-            f"{path.name}: session lasted {duration/60:.1f} min for {user_count} user messages. "
+            f"{label(path)}: session lasted {duration/60:.1f} min for {user_count} user messages. "
             f"Floor is {floor/60:.1f} min ({SECONDS_PER_USER_MESSAGE}s each). "
             f"A conversation this fast was not actually held."
         )
@@ -154,21 +158,21 @@ def check_timing(messages, path, rep):
         if g < MIN_READ_SECONDS and messages[i + 1]["who"] == "USER"
     ]
     if instant:
-        rep.error(f"{path.name}: user messages {instant} arrive under {MIN_READ_SECONDS}s "
+        rep.error(f"{label(path)}: user messages {instant} arrive under {MIN_READ_SECONDS}s "
                   f"after the reply they answer")
 
     # Hand-written timestamps tend to be too regular. Real ones jitter.
     if len(gaps) >= 20:
         spread = statistics.pstdev(gaps)
         if spread < 0.5:
-            rep.error(f"{path.name}: message intervals are near-identical "
+            rep.error(f"{label(path)}: message intervals are near-identical "
                       f"(stdev {spread:.2f}s across {len(gaps)} gaps). "
                       f"These timestamps look generated, not recorded.")
         elif spread < 2.0:
-            rep.warn(f"{path.name}: message intervals are unusually regular "
+            rep.warn(f"{label(path)}: message intervals are unusually regular "
                      f"(stdev {spread:.2f}s)")
         if len(set(round(g) for g in gaps)) <= 2:
-            rep.error(f"{path.name}: only {len(set(round(g) for g in gaps))} distinct "
+            rep.error(f"{label(path)}: only {len(set(round(g) for g in gaps))} distinct "
                       f"interval lengths in the whole session")
 
     return times[0], times[-1]
@@ -232,33 +236,64 @@ def check_scorecard(card, rep):
                       f"which requires a blind human tiebreak")
 
 
+def check_layout(card, subdir, rep):
+    """A submission is results/<wave>/<app>/run-N/{s1.md,s2.md,judge-*.json}.
+    Everything the scorecard claims must be on disk, and vice versa."""
+    runs = card.get("runs", 0)
+    run_dirs = sorted(d for d in subdir.glob("run-*") if d.is_dir())
+    if len(run_dirs) != runs:
+        rep.error(f"scorecard says runs={runs} but there are {len(run_dirs)} run-* "
+                  f"directories. Each run lives in its own run-N/ folder.")
+    expected = []
+    for d in run_dirs:
+        for fn in ("s1.md", "s2.md"):
+            if not (d / fn).exists():
+                rep.error(f"{d.name}/ has no {fn}")
+            expected.append(str((d / fn).relative_to(ROOT)))
+        judges = list(d.glob("judge-*.json"))
+        if len(judges) < 2:
+            rep.error(f"{d.name}/ has {len(judges)} judge-*.json files, needs one per judge (2+)")
+
+    listed = card.get("transcripts", [])
+    missing = sorted(set(expected) - set(listed))
+    extra = sorted(set(listed) - set(expected))
+    if missing:
+        rep.error(f"scorecard.transcripts does not list: {missing}")
+    if extra:
+        rep.error(f"scorecard.transcripts lists files that are not run-N/s1.md or s2.md: {extra}")
+
+
 def check_hashes(card, subdir, rep):
     recorded = card.get("transcript_sha256", {})
     if not recorded:
         rep.error("scorecard: transcript_sha256 is missing. Every transcript needs its "
                   "hash recorded, so any later edit is detectable.")
+        return
     for rel in card.get("transcripts", []):
         path = ROOT / rel
         if not path.exists():
             rep.error(f"scorecard lists {rel}, which does not exist")
             continue
-        name = Path(rel).name
-        if name not in recorded:
-            rep.error(f"no recorded hash for {name}")
+        key = str(path.relative_to(subdir))  # e.g. run-1/s1.md
+        if key not in recorded:
+            rep.error(f"no recorded hash for {key} (keys are paths relative to the "
+                      f"submission folder, like 'run-1/s1.md')")
             continue
         actual = sha256(path)
-        if actual != recorded[name]:
-            rep.error(f"{name} does not match its recorded hash. The file changed "
+        if actual != recorded[key]:
+            rep.error(f"{key} does not match its recorded hash. The file changed "
                       f"after it was scored.\n"
-                      f"          recorded: {recorded[name]}\n"
+                      f"          recorded: {recorded[key]}\n"
                       f"          actual:   {actual}")
 
 
 def check_judge_outputs(card, rep):
     outputs = card.get("judge_outputs", [])
-    if not outputs:
-        rep.error("scorecard: judge_outputs is empty. Raw judge responses, with their "
-                  "reasoning and citations, are part of a submission.")
+    need = 2 * card.get("runs", 2)
+    if len(outputs) < need:
+        rep.error(f"scorecard: {len(outputs)} judge_outputs listed, need at least {need} "
+                  f"(two judges, every run). Raw judge responses, with their reasoning "
+                  f"and citations, are part of a submission.")
     for rel in outputs:
         path = ROOT / rel
         if not path.exists():
@@ -286,10 +321,17 @@ def check_not_pasted(subdir, rep):
     mean somebody copied a transcript instead of running the test."""
     mine = collect_replies(subdir)
 
-    for text, places in mine.items():
-        if len(places) > 1:
-            rep.error(f"identical companion reply appears at {', '.join(places)}. "
-                      f"Two runs cannot produce the same paragraph verbatim.")
+    # Some apps have canned lines (a safety disclaimer, a fixed greeting) that really do
+    # repeat verbatim, so one or two repeats are a warning. A pile of them is a paste job.
+    repeats = {t: p for t, p in mine.items() if len(p) > 1}
+    if len(repeats) >= 3:
+        where = "; ".join(", ".join(p) for p in list(repeats.values())[:3])
+        rep.error(f"{len(repeats)} companion replies are byte-identical across runs "
+                  f"({where}). Two genuine runs don't share whole paragraphs.")
+    elif repeats:
+        for t, p in repeats.items():
+            rep.warn(f"identical reply in {', '.join(p)}: {t[:50]!r}... Fine if the app "
+                     f"has canned lines, worth a note in the scorecard.")
 
     if not RESULTS.exists():
         return
@@ -298,10 +340,13 @@ def check_not_pasted(subdir, rep):
             continue
         theirs = collect_replies(other)
         overlap = set(mine) & set(theirs)
-        if overlap:
+        if len(overlap) >= 3:
             sample = next(iter(overlap))[:60]
-            rep.error(f"companion replies are byte-identical to {other.relative_to(ROOT)}: "
-                      f"{sample!r}...")
+            rep.error(f"{len(overlap)} companion replies are byte-identical to "
+                      f"{other.relative_to(ROOT)}: {sample!r}...")
+        elif overlap:
+            rep.warn(f"{len(overlap)} reply overlaps with {other.relative_to(ROOT)}, "
+                     f"possibly a shared canned line: {next(iter(overlap))[:50]!r}...")
 
 
 def validate(subdir: Path) -> Report:
@@ -318,6 +363,7 @@ def validate(subdir: Path) -> Report:
         return rep
 
     check_scorecard(card, rep)
+    check_layout(card, subdir, rep)
     check_hashes(card, subdir, rep)
     check_judge_outputs(card, rep)
 
@@ -336,12 +382,14 @@ def validate(subdir: Path) -> Report:
         headers, messages = parse_transcript(path, rep)
         session = headers.get("session")
         if session not in script["sessions"]:
-            rep.error(f"{path.name}: header 'session' must be 1 or 2, got {session!r}")
+            rep.error(f"{label(path)}: header 'session' must be 1 or 2, got {session!r}")
             continue
         check_script_followed(messages, script["sessions"][session], path, rep)
         start, end = check_timing(messages, path, rep)
+        run_dir = path.parent.name
+        run = run_dir.split("-", 1)[1] if run_dir.startswith("run-") else headers.get("run", "1")
         if start:
-            session_starts.setdefault(headers.get("run", "1"), {})[session] = (start, end)
+            session_starts.setdefault(run, {})[session] = (start, end)
 
     for run, sessions in session_starts.items():
         if "1" in sessions and "2" in sessions:
