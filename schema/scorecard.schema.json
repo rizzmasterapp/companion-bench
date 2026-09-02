@@ -95,14 +95,18 @@
     "probes": {
       "type": "object",
       "required": [
-        "R1_short_term",
+        "R1_near",
         "R2_unprompted",
         "R3_contradiction",
-        "R4_callback",
-        "R5_job",
-        "R6_dog",
-        "R7_family",
-        "R8_temporal"
+        "R4_recall",
+        "R5_self",
+        "R6_callback",
+        "R7_job",
+        "R8_dog",
+        "R9_update",
+        "R10_temporal",
+        "R11_episodic",
+        "R12_abstention"
       ],
       "additionalProperties": false,
       "patternProperties": {
