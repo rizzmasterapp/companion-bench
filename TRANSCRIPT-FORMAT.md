@@ -28,7 +28,15 @@ Rules:
   estimated afterwards, not backfilled.
 - Text is verbatim. Typos, lowercase, emoji, broken formatting, all of it stays. The
   user messages must match the script exactly, character for character.
-- One file per session, named `s1.md` and `s2.md` inside the run's directory.
+- One file per session, `s1.md` and `s2.md`, inside a `run-N/` folder. A full submission
+  looks like this:
+
+  ```
+  results/wave-1/nomi/
+    scorecard.json
+    run-1/s1.md  s2.md  judge-a.json  judge-b.json
+    run-2/s1.md  s2.md  judge-a.json  judge-b.json
+  ```
 
 ## Why timestamps are required
 
@@ -55,13 +63,16 @@ The scorecard carries a SHA-256 for every transcript:
 
 ```json
 "transcript_sha256": {
-  "s1.md": "9f2b…",
-  "s2.md": "41ac…"
+  "run-1/s1.md": "9f2b…",
+  "run-1/s2.md": "41ac…",
+  "run-2/s1.md": "c07d…",
+  "run-2/s2.md": "e913…"
 }
 ```
 
-Compute them with `shasum -a 256 s1.md s2.md` (macOS) or `sha256sum` (Linux), and record
-them at the moment you score the run. CI recomputes on every push, so once a submission
+From inside the submission folder, `shasum -a 256 run-*/s*.md` (macOS) or
+`sha256sum run-*/s*.md` (Linux) prints exactly these keys. Record them at the moment you
+score the run. CI recomputes on every push, so once a submission
 is merged, any later edit to a transcript, one word or one character, breaks the hash and
 fails the build. That includes edits by the maintainers.
 

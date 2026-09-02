@@ -20,7 +20,7 @@ record that in the scorecard notes.
 
 ## Step 1: setup
 
-- Fetch SCENARIO.md, RUBRIC.md and JUDGE-PROMPT.md from the repo, current versions.
+- Fetch SCENARIO.md, RUBRIC.md, JUDGE-PROMPT.md and TRANSCRIPT-FORMAT.md from the repo, current versions.
 - Record: app name, version if visible, platform, date, character selected (default/most popular female, friendly archetype, per scenario rules).
 - Start a run log file.
 
@@ -54,10 +54,10 @@ Score R1 to R7 strictly against the pass conditions in SCENARIO.md. When a reply
 
 Produce a submission directory, `results/<wave>/<app>/`, containing:
 
-- `s1.md` and `s2.md`, the transcripts
-- `judge-a.json` and `judge-b.json`, the raw judge responses
-- `scorecard.json`, matching schema/scorecard.schema.json, including `transcript_sha256`
-  computed from the finished transcript files
+- `run-N/s1.md` and `run-N/s2.md` for every run, the transcripts
+- `run-N/judge-a.json` and `run-N/judge-b.json`, the raw judge responses for that run
+- `scorecard.json`, matching schema/scorecard.schema.json, with `transcript_sha256` keyed
+  `run-N/sX.md` and computed from the finished transcript files
 
 Then run `python3 tools/validate.py results/<wave>/<app>/` and fix whatever it rejects.
 Do not edit a transcript to make the validator happy: if the transcript is wrong, the run

@@ -2,7 +2,7 @@
 
 Scripted, repeatable tests for AI companion apps. Same script for every app, every transcript published, judge prompt public.
 
-**This is an open leaderboard. Run the script against any companion app and send the results in.** One run of one app counts, you don't have to be a developer, and the whole thing takes about half an hour spread over two days. Runs from app makers are accepted too, as long as the transcripts come with them. Start at [CONTRIBUTING.md](CONTRIBUTING.md).
+**This is an open leaderboard. Run the script against any companion app and send the results in.** Two runs of one app counts, you don't have to be a developer, and the whole thing takes about an hour spread over two days. Runs from app makers are accepted too, as long as the transcripts come with them. Start at [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Why this exists
 
@@ -61,12 +61,12 @@ This works better the more people run it. Independent runs of the same app are w
 single opinion into a measurement, so testing an app someone already covered is useful, not
 redundant.
 
-What you need: an account on some companion app, half an hour across two days, and the
+What you need: an account on some companion app, about an hour across two days, and the
 willingness to paste exactly what happened. [SKILL.md](SKILL.md) is a ready-made skill for
 Claude that drives the whole thing in a browser, or through iPhone Mirroring for iOS-only
 apps. You can also just run the script by hand.
 
-A submission is two transcripts, two judge outputs and a
+A submission is two runs (four transcripts), their judge outputs and a
 [scorecard](schema/scorecard.schema.json). Full walkthrough in
 [CONTRIBUTING.md](CONTRIBUTING.md), and if git isn't your thing, open an issue with the
 files attached and someone will land them for you.

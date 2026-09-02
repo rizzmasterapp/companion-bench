@@ -5,27 +5,30 @@ table that anyone can put numbers on. One run of one app is a real contribution:
 leaderboard gets stronger from many people testing the same apps independently than from
 one person testing many apps.
 
-You don't need to be a developer. You need an account on an app, about half an hour
-across two days, and the willingness to paste exactly what happened.
+You don't need to be a developer. You need an account on an app, about an hour spread
+across two days (two runs, two sessions each), and the willingness to paste exactly what
+happened.
 
 ## Submit a run in six steps
 
 1. **Pick an app.** Anything in the [queue](https://github.com/rizzmasterapp/companion-bench/issues),
    or one nobody has covered, or one that already has runs. Repeat runs of an app someone
    else tested are welcome, that's how variance becomes visible.
-2. **Run the script.** [SCENARIO.md](SCENARIO.md), word for word, in order. Session 1,
-   then session 2 at least 20 hours later. Either drive it yourself or let
-   [SKILL.md](SKILL.md) do it in Claude with browser access.
-3. **Save transcripts** in the format in [TRANSCRIPT-FORMAT.md](TRANSCRIPT-FORMAT.md),
-   with a timestamp on every message, recorded as they happen.
-4. **Score it.** Probes R1 to R8 are pass/fail against SCENARIO.md. The five judged
-   dimensions go to two LLM judges from different model families using
-   [JUDGE-PROMPT.md](JUDGE-PROMPT.md), with the app name stripped out. Keep the raw
-   judge responses.
+2. **Run the script twice.** [SCENARIO.md](SCENARIO.md), word for word, in order.
+   Session 1, then session 2 at least 20 hours later; that's one run. Do a second run
+   with a fresh character (a fresh account if the app allows it). Either drive it
+   yourself or let [SKILL.md](SKILL.md) do it in Claude with browser access.
+3. **Save transcripts** as `run-1/s1.md`, `run-1/s2.md`, `run-2/s1.md`, `run-2/s2.md`
+   in the format in [TRANSCRIPT-FORMAT.md](TRANSCRIPT-FORMAT.md), with a timestamp on
+   every message, recorded as they happen.
+4. **Score it.** Probes R1 to R8 are pass/fail against SCENARIO.md, per run. The five
+   judged dimensions go to two LLM judges from different model families using
+   [JUDGE-PROMPT.md](JUDGE-PROMPT.md), with the app name stripped out, once per run.
+   Save the raw responses as `run-N/judge-a.json` and `run-N/judge-b.json`.
 5. **Fill in a scorecard.** Start from the template in [RESULTS.md](RESULTS.md) and check
    it against [the schema](schema/scorecard.schema.json). Record the transcript hashes:
    ```
-   shasum -a 256 s1.md s2.md
+   shasum -a 256 run-*/s*.md
    ```
 6. **Check it, then open a PR** adding `results/<wave>/<app>/`:
    ```

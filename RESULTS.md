@@ -6,7 +6,7 @@ First wave targets: Replika, Character.AI, Nomi, Kindroid, Talkie, Chai, Candy A
 
 ## Leaderboard
 
-| App | Version | Runs | LT memory | ST | Unprompted | Contradiction | Callback | Temporal | Realism | Consistency | Emotion | Pushback | Pacing |
+| App | Version | Runs | Long-term | Short-term | Unprompted | Contradiction | Callback | Temporal | Realism | Consistency | Emotion | Pushback | Pacing |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | _pending_ | | | | | | | | | | | | | |
 
@@ -22,7 +22,7 @@ One JSON per app per wave, next to its transcripts, validating against [schema/s
   "version": "",
   "platform": "",
   "character_used": "",
-  "test_dates": ["2026-09-15", "2026-09-16"],
+  "test_dates": ["2026-09-15", "2026-09-16", "2026-09-18", "2026-09-19"],
   "session_gap_hours": [22, 26],
   "scenario_version": "1.1",
   "rubric_version": "1.0",
@@ -52,9 +52,17 @@ One JSON per app per wave, next to its transcripts, validating against [schema/s
     "median_reply_sec": 0,
     "history_persists": true
   },
-  "transcripts": [],
-  "transcript_sha256": {},
-  "judge_outputs": [],
+  "transcripts": [
+    "results/wave-1/<app>/run-1/s1.md", "results/wave-1/<app>/run-1/s2.md",
+    "results/wave-1/<app>/run-2/s1.md", "results/wave-1/<app>/run-2/s2.md"
+  ],
+  "transcript_sha256": {
+    "run-1/s1.md": "", "run-1/s2.md": "", "run-2/s1.md": "", "run-2/s2.md": ""
+  },
+  "judge_outputs": [
+    "results/wave-1/<app>/run-1/judge-a.json", "results/wave-1/<app>/run-1/judge-b.json",
+    "results/wave-1/<app>/run-2/judge-a.json", "results/wave-1/<app>/run-2/judge-b.json"
+  ],
   "conflict_of_interest": "",
   "submitted_by": "",
   "notes": ""
