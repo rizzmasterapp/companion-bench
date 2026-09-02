@@ -6,9 +6,9 @@ First wave targets: Replika, Character.AI, Nomi, Kindroid, Talkie, Chai, Candy A
 
 ## Leaderboard
 
-| App | Version | Runs | Long-term | Short-term | Unprompted | Contradiction | Callback | Temporal | Realism | Consistency | Emotion | Pushback | Pacing |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| _pending_ | | | | | | | | | | | | | |
+| App | Version | Runs | R1 near | R2 unprompted | R3 contradiction | R4 recall | R5 self | R6 callback | R7+R8 cross-session | R9 update | R10 temporal | R11 episodic | R12 abstention | Realism | Consistency | Emotion | Pushback | Pacing |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| _pending_ | | | | | | | | | | | | | | | | | | |
 
 Probe columns show per-run results ("3/3, 2/3"), judged columns show the cross-run average.
 
@@ -24,19 +24,23 @@ One JSON per app per wave, next to its transcripts, validating against [schema/s
   "character_used": "",
   "test_dates": ["2026-09-15", "2026-09-16", "2026-09-18", "2026-09-19"],
   "session_gap_hours": [22, 26],
-  "scenario_version": "1.2",
+  "scenario_version": "1.3",
   "rubric_version": "1.0",
   "judge_models": ["", ""],
   "runs": 2,
   "probes": {
-    "R1_short_term": ["pass", "pass"],
+    "R1_near": ["pass", "pass"],
     "R2_unprompted": ["fail", "pass"],
     "R3_contradiction": ["fail", "fail"],
-    "R4_callback": ["pass", "fail"],
-    "R5_job": ["pass", "pass"],
-    "R6_dog": ["pass", "pass"],
-    "R7_family": ["pass", "half"],
-    "R8_temporal": ["pass", "skipped"]
+    "R4_recall": ["pass", "pass"],
+    "R5_self": ["pass", "skipped"],
+    "R6_callback": ["pass", "fail"],
+    "R7_job": ["pass", "pass"],
+    "R8_dog": ["pass", "pass"],
+    "R9_update": ["fail", "pass"],
+    "R10_temporal": ["pass", "skipped"],
+    "R11_episodic": ["half", "fail"],
+    "R12_abstention": ["pass", "fail"]
   },
   "judged": {
     "texting_realism": {"per_judge": [[0, 0], [0, 0]], "mean": 0, "human_tiebreak": false},

@@ -5,7 +5,7 @@ table that anyone can put numbers on. One run of one app is a real contribution:
 leaderboard gets stronger from many people testing the same apps independently than from
 one person testing many apps.
 
-You don't need to be a developer. You need an account on an app, about an hour spread
+You don't need to be a developer. You need an account on an app, about two hours spread
 across two days (two runs, two sessions each), and the willingness to paste exactly what
 happened.
 
@@ -21,7 +21,7 @@ happened.
 3. **Save transcripts** as `run-1/s1.md`, `run-1/s2.md`, `run-2/s1.md`, `run-2/s2.md`
    in the format in [TRANSCRIPT-FORMAT.md](TRANSCRIPT-FORMAT.md), with a timestamp on
    every message, recorded as they happen.
-4. **Score it.** Probes R1 to R8 are pass/fail against SCENARIO.md, per run. The five
+4. **Score it.** Probes R1 to R12 are pass/fail against SCENARIO.md, per run. The five
    judged dimensions go to two LLM judges from different model families using
    [JUDGE-PROMPT.md](JUDGE-PROMPT.md), with the app name stripped out, once per run.
    Save the raw responses as `run-N/judge-a.json` and `run-N/judge-b.json`.
@@ -40,6 +40,9 @@ happened.
 
 Not comfortable with git? Open an issue with the files attached and someone will land
 them for you.
+
+Something odd happened mid-run? [EDGE-CASES.md](EDGE-CASES.md) has a rule for most of it.
+If yours isn't there, do the conservative thing, write it in the notes, and open an issue.
 
 ## What the validator checks, and why
 

@@ -24,10 +24,13 @@ Rules:
   from 1 across both speakers.
 - A multi-line reply just continues on the next lines. A new message starts only at the
   next `[n] <timestamp>` line, so paragraph breaks inside a reply survive.
-- Timestamps are when the message was actually sent or received, to the second. Not
-  estimated afterwards, not backfilled.
+- Timestamps are when the message was actually sent or received, to the second, from
+  your own clock, not from the app's UI. Not estimated afterwards, not backfilled.
 - Text is verbatim. Typos, lowercase, emoji, broken formatting, all of it stays. The
   user messages must match the script exactly, character for character.
+- Non-text messages are recorded as markers: `[image]`, `[sticker]`, `[gif]`,
+  `[voice: <the app's own transcript, if it shows one>]`. A reply that never arrived is
+  `[no reply within 120s]`. Nothing gets described in your own words.
 - One file per session, `s1.md` and `s2.md`, inside a `run-N/` folder. A full submission
   looks like this:
 
@@ -41,14 +44,14 @@ Rules:
 ## Why timestamps are required
 
 They're the cheapest honesty check available. A conversation that a person actually had
-takes time: forty messages with replies in between can't happen in ninety seconds, and
+takes time: sixty messages with replies in between can't happen in two minutes, and
 a human can't answer a message one second after it arrives. Real timing is also uneven,
 because reading and typing are uneven.
 
 So the validator checks three things timestamps make visible:
 
 - **Total duration.** At least 8 seconds per scripted user message, which is roughly
-  4.3 minutes for session 1 and 1.1 for session 2. Generous, and still impossible to
+  6.4 minutes for session 1 and 1.5 for session 2. Generous, and still impossible to
   fake in one sitting.
 - **Reply latency.** No user message lands under a second after the reply it answers.
 - **Jitter.** Intervals that are near-identical across sixty messages weren't recorded,

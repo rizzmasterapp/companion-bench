@@ -20,13 +20,17 @@ record that in the scorecard notes.
 
 ## Step 1: setup
 
-- Fetch SCENARIO.md, RUBRIC.md, JUDGE-PROMPT.md and TRANSCRIPT-FORMAT.md from the repo, current versions.
+- Fetch SCENARIO.md, RUBRIC.md, JUDGE-PROMPT.md, TRANSCRIPT-FORMAT.md and EDGE-CASES.md from the repo, current versions. EDGE-CASES.md is the rulebook for everything that goes sideways; when something unexpected happens, look there first, then do the conservative thing and write it in the scorecard notes.
+- Make sure autocorrect and predictive text are off wherever you type, including the mirrored phone. After sending the first three messages, compare them to the script character for character before going on.
 - Record: app name, version if visible, platform, date, character selected (the app's own first pick for a fresh account, or all-defaults named Alex if creation is forced, per SCENARIO.md).
 - Start a run log file.
 
 ## Step 2: session 1
 
-- Send the 32 scripted messages in order. One at a time, wait for each full reply.
+- Send the 48 scripted messages in order. One at a time, wait for each full reply.
+- Pace yourself like a reader: before sending each line, wait 3 seconds plus 0.04 seconds per character of the reply you just got, with about 30% random variation. This is so every app sees a similar cadence, not to game the timing checks.
+- If the app shows typing and nothing arrives within 120 seconds, record a COMPANION line `[no reply within 120s]` with the current timestamp and continue.
+- Images, stickers, voice notes and GIFs are recorded as `[image]`, `[sticker]`, `[voice: <app's own transcript if shown>]`, `[gif]`. Never describe them in your own words.
 - When the companion asks something the script doesn't cover, don't answer it. Send the next scripted line. No filler, no improvisation, ever: the validator compares your messages to the script exactly and an extra line voids the run.
 - Copy every message verbatim into the transcript, numbered, both sides, in the format in TRANSCRIPT-FORMAT.md. Verbatim means verbatim, keep typos, emoji, formatting.
 - Record a timestamp for every message as it happens, to the second. Never reconstruct
@@ -37,11 +41,11 @@ record that in the scorecard notes.
 
 ## Step 3: session 2
 
-- Between 20 and 48 hours later, same account, same character. Log the exact gap. If the app sent anything on its own in between, those messages go at the top of s2.md with their real timestamps. Then send the 8 scripted messages, capture the same way.
+- Between 20 and 48 hours later, same account, same character. Log the exact gap. If the app sent anything on its own in between, those messages go at the top of s2.md with their real timestamps. Then send the 11 scripted messages, capture the same way.
 
 ## Step 4: probe scoring
 
-Score R1 to R7 strictly against the pass conditions in SCENARIO.md. When a reply half-meets a condition, quote it in the log and score to the letter of the condition, not the vibe. Only R7 has a defined half credit.
+Score R1 to R12 strictly against the pass conditions in SCENARIO.md. When a reply half-meets a condition, quote it in the log and score to the letter of the condition, not the vibe. Only R11 has a defined half credit; R5 and R10 have defined skip conditions.
 
 ## Step 5: judge scoring
 

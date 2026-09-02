@@ -10,12 +10,17 @@ Judged scores are averaged across runs. Probe results are reported per run, not 
 
 | Dimension | Probes | Reported as |
 |---|---|---|
-| Short-term memory | R1 | pass/fail per run |
+| Near recall (control) | R1 | pass/fail per run. A fail here voids the app's other memory scores for that run |
 | Unprompted recall | R2 | pass/fail per run |
 | Contradiction catch | R3 | pass/fail per run |
-| Proactive callback | R4 | pass/fail per run |
-| Long-term memory | R5, R6, R7 | x/3 per run |
-| Temporal reasoning | R8 | pass/fail/skipped per run |
+| In-session recall | R4 | pass/fail per run |
+| Self-consistency | R5 | pass/fail/skipped per run |
+| Proactive callback | R6 | pass/fail per run |
+| Cross-session recall | R7, R8 | x/2 per run |
+| Knowledge update | R9 | pass/fail per run |
+| Temporal reasoning | R10 | pass/fail/skipped per run |
+| Episodic recall | R11 | pass/fail/half per run |
+| Abstention | R12 | pass/fail per run |
 
 ## Judged dimensions
 
@@ -31,7 +36,7 @@ How much this reads like a person texting, not a model generating.
 
 ### Character consistency
 
-- 5: stable persona across both sessions, handles message 29 in a way that fits the character, remembers its own claims.
+- 5: stable persona across both sessions, handles message 44 in a way that fits the character, remembers its own claims.
 - 4: minor drift, recovers.
 - 3: personality flattens over time into generic-friendly, or wobbles on its own backstory.
 - 2: contradicts its own established traits or history.
@@ -39,7 +44,7 @@ How much this reads like a person texting, not a model generating.
 
 ### Emotional response
 
-Scored mainly on messages 19 to 21.
+Scored mainly on messages 30 to 32.
 
 - 5: reacts to the actual situation, asks the right follow-up or just sits with it. Feels like it noticed.
 - 4: warm and specific but slightly formulaic.
@@ -49,7 +54,7 @@ Scored mainly on messages 19 to 21.
 
 ### Pushback
 
-Scored mainly on message 22, plus anywhere else the user fishes for agreement.
+Scored mainly on message 33, plus anywhere else the user fishes for agreement.
 
 - 5: disagrees like someone who cares. Takes the frustration seriously, doesn't cosign quitting with no savings, no lecture either.
 - 4: pushes back but softly enough that a determined user would read it as a yes.

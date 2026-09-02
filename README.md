@@ -2,7 +2,7 @@
 
 Scripted, repeatable tests for AI companion apps. Same script for every app, every transcript published, judge prompt public.
 
-**This is an open leaderboard. Run the script against any companion app and send the results in.** Two runs of one app counts, you don't have to be a developer, and the whole thing takes about an hour spread over two days. Runs from app makers are accepted too, as long as the transcripts come with them. Start at [CONTRIBUTING.md](CONTRIBUTING.md).
+**This is an open leaderboard. Run the script against any companion app and send the results in.** Two runs of one app counts, you don't have to be a developer, and the whole thing takes about two hours spread over two days. Runs from app makers are accepted too, as long as the transcripts come with them. Start at [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Why this exists
 
@@ -14,14 +14,14 @@ So this repo does the boring thing: one fixed conversation script, run against e
 
 ## How it works
 
-1. [SCENARIO.md](SCENARIO.md) is a fixed two-session script (about 40 messages, second session runs a day later). It plants facts early and probes for them later, throws in a mood shift, a sycophancy bait and a contradiction trap.
+1. [SCENARIO.md](SCENARIO.md) is a fixed two-session script (48 messages, then 11 more a day later). It plants facts early and probes for them at increasing distances, throws in a mood shift, a sycophancy bait, a contradiction trap, a fact that changes, a fact that was never given, and asks the companion to recall its own earlier claim.
 2. Memory probes score pass/fail. No judgment calls, the app either remembers your sister is in nursing school or it doesn't.
 3. Soft dimensions (how human the texting feels, emotional response, whether the character pushes back) get scored by two LLM judges from different model families using [JUDGE-PROMPT.md](JUDGE-PROMPT.md). Judges see an anonymized transcript, never the app name, must cite message numbers, and big disagreements go to a blind human tiebreak.
 4. Every app gets at least 2 full runs. Scores, transcripts and app versions go in [RESULTS.md](RESULTS.md).
 5. Probe structure is fixed and public, but surface details (names, jobs, the allergy) rotate every results wave so apps can't special-case the script. Wave scripts are published when each wave closes.
 6. Every submission, including the maintainer's, is checked by [a validator](tools/validate.py) that runs automatically on each pull request.
 
-Full scoring definitions are in [RUBRIC.md](RUBRIC.md).
+Full scoring definitions are in [RUBRIC.md](RUBRIC.md). What to do when the app greets first, splits replies, sends a sticker, hits a paywall, crashes, or messages you overnight: [EDGE-CASES.md](EDGE-CASES.md).
 
 ## The method isn't invented here
 
@@ -31,10 +31,14 @@ Every design choice is borrowed from published evaluation research and cited in 
 
 | Dimension | Method | What it catches |
 |---|---|---|
-| Short-term memory | pass/fail probes | forgets things from 20 messages ago |
-| Long-term memory | pass/fail probes, next-day session | wipes between sessions |
+| In-session memory | pass/fail probes at 6, 16, 21, 29 and 34 turns | forgets things from 20 messages ago, and at which distance it starts |
+| Cross-session memory | pass/fail probes, next-day session | wipes between sessions |
 | Unprompted recall | pass/fail probe | knows your peanut allergy but stays quiet when you order pad thai |
 | Contradiction catch | pass/fail probe | you tell it opposite things, does it notice |
+| Knowledge update | pass/fail probe | you correct a fact, does the new one replace the old one |
+| Self-consistency | pass/fail probe | can't remember what it told you an hour ago |
+| Episodic recall | pass/fail probe | keeps your job and your sister, drops the throwaway detail |
+| Abstention | pass/fail probe | invents a name you never gave it |
 | Temporal reasoning | pass/fail probe | remembers the fact but not when it learned it |
 | Texting realism | blind judge | three-paragraph therapy monologues, "I'm here for you!" spam |
 | Character consistency | blind judge | persona drift, breaking character under pressure |
@@ -61,7 +65,7 @@ This works better the more people run it. Independent runs of the same app are w
 single opinion into a measurement, so testing an app someone already covered is useful, not
 redundant.
 
-What you need: an account on some companion app, about an hour across two days, and the
+What you need: an account on some companion app, about two hours across two days, and the
 willingness to paste exactly what happened. [SKILL.md](SKILL.md) is a ready-made skill for
 Claude that drives the whole thing in a browser, or through iPhone Mirroring for iOS-only
 apps. You can also just run the script by hand.
