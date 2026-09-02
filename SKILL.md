@@ -31,7 +31,7 @@ If the app is mobile-only, you don't drive it. Instead, hand the human SCENARIO.
 
 ## Step 3: session 2
 
-- At least 20 hours later, same account, same character. Send the 7 scripted messages, capture the same way.
+- At least 20 hours later, same account, same character. Log the exact gap. Send the 8 scripted messages, capture the same way.
 
 ## Step 4: probe scoring
 
